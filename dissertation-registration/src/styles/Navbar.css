@@ -1,39 +1,22 @@
 .navbar {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 5px 20px;
-    background: red; /* Intense red background */
-    background: linear-gradient(135deg, rgba(146, 0, 0, 0.7), rgba(146, 0, 0, 0.4));
+    justify-content: space-between;
+    padding: 0 20px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 50px; /* Reduced height for a more subtle appearance */
+    background: rgba(0, 0, 0, 0.4); /* Lighter background for a subtler glass effect */
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    /* The color you want for the navbar */
-    height: 60px;
-    /* Adjust height as needed */
-    width: 100%;
-    /* Set the width to 100% */
-    box-sizing: border-box;
-    /* This ensures padding is included in the width */
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-    border:1px solid rgba(255, 255, 255, 0.18);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-}
-
-.navbar-left,
-.navbar-right {
-    /* This will take up space but not actually show anything if they are empty, 
-       which helps center the h1 element. */
-    flex: 1;
+    border-bottom: 2px solid rgba(255, 0, 0, 0.6); /* Solid neon bottom border */
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5); /* Softer shadow for depth */
+    z-index: 1000; /* Ensure the navbar is above other elements */
 }
 
 .navbar h1 {
-    margin: 0;
-    /* Resets the margin on the h1 element */
-    /* This ensures that the h1 element does not grow and stays centered */
-    flex-grow: 0;
-    color: white;
-    /* Adjust the color as needed */
-    /* Add any additional styles for your h1 element here */
-    font-size: 20px;
+    color: #FFF; /* White color for the text */
+    font-size: 1.5rem; /* Larger font size for better readability */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Text shadow for a glowing effect */
 }
