@@ -32,7 +32,23 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  /* This will make sure flex children stretch to the container's width */
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.app-container > .flex-item {
+  flex-grow: 1;
 }

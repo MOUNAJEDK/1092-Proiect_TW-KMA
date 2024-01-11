@@ -1,0 +1,39 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 20px;
+    background: red; /* Intense red background */
+    background: linear-gradient(135deg, rgba(255, 0, 0, 0.3), rgba(255, 0, 0, 0.1)); /* Red tinted glass effect */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    /* The color you want for the navbar */
+    height: 60px;
+    /* Adjust height as needed */
+    width: 100%;
+    /* Set the width to 100% */
+    box-sizing: border-box;
+    /* This ensures padding is included in the width */
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border:1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.navbar-left,
+.navbar-right {
+    /* This will take up space but not actually show anything if they are empty, 
+       which helps center the h1 element. */
+    flex: 1;
+}
+
+.navbar h1 {
+    margin: 0;
+    /* Resets the margin on the h1 element */
+    /* This ensures that the h1 element does not grow and stays centered */
+    flex-grow: 0;
+    color: white;
+    /* Adjust the color as needed */
+    /* Add any additional styles for your h1 element here */
+    font-size: 20px;
+}
