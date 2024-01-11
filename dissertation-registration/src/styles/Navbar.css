@@ -4,7 +4,7 @@
     align-items: center;
     padding: 5px 20px;
     background: red; /* Intense red background */
-    background: linear-gradient(135deg, rgba(255, 0, 0, 0.3), rgba(255, 0, 0, 0.1)); /* Red tinted glass effect */
+    background: linear-gradient(135deg, rgba(146, 0, 0, 0.7), rgba(146, 0, 0, 0.4));
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     /* The color you want for the navbar */
