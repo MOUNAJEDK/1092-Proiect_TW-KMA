@@ -9,15 +9,32 @@ const Login = () => {
   const [password, setPassword] = useState('');
 
   // Function to handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-    // Here, you can add logic to validate the email and password
-    // For simplicity, let's just log them to the console
-    console.log('Email:', email);
-    console.log('Password:', password);
+    try {
+      const response = await fetch('/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-    // You may want to add further authentication logic here
+      const data = await response.json();
+      if (response.status === 200) {
+        // Handle login success
+        console.log('Login successful:', data);
+        // Redirect or update state based on successful login
+      } else {
+        // Handle login failure
+        console.error('Login failed:', data.message);
+        // Show error message to the user
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+      // Handle network error
+    }
   };
 
   return (
