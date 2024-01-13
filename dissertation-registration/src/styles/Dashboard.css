@@ -1,0 +1,55 @@
+@keyframes stretchAnimation {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+        outline-color: rgba(255, 255, 255, 0);
+        /* Outline is transparent at the start */
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+        outline-color: rgba(255, 255, 255, 0.5);
+        /* Outline fades in to 50% opacity */
+    }
+}
+
+.dashboard-container {
+    position: fixed;
+    /* Use fixed to ensure it's relative to the viewport */
+    top: 50px;
+    /* Start below the Navbar */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4));
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    /* Hide any overflow during animation */
+    animation: stretchAnimation 1s forwards;
+    /* Apply the animation */
+    z-index: 10;
+    /* Ensure it's above the page content but below the Navbar */
+    outline: 2px solid rgba(255, 0, 0, 0.6);
+    /* Neon red outline with 60% opacity */
+    box-shadow:
+        0 0 8px rgba(255, 0, 0, 0.8),
+        0 0 30px rgba(255, 0, 0, 0.45),
+        inset 0 0 4px rgba(255, 0, 0, 0.3),
+        0 0 4px rgba(255, 0, 0, 0.6);
+    /* Outer glow to match the navbar */
+}
+
+.dashboard-content {
+    transform-origin: center top;
+    /* Ensure text scales from the top center and not stretched */
+    transition: transform 0.5s, opacity 0.5s ease 1s;
+    /* Smooth transition for text appearance */
+}
+
+.dashboard-container .dashboard-content {
+    opacity: 1;
+    /* Fully visible after the transition */
+    transform: none;
+    /* Ensure no scaling is applied to the text */
+}

@@ -1,12 +1,13 @@
-// Login.js
-
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/Login.css'
 
 const Login = () => {
   // State to manage the input values
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const navigate = useNavigate();
 
   // Function to handle form submission
   const handleSubmit = async (event) => {
@@ -23,9 +24,11 @@ const Login = () => {
 
       const data = await response.json();
       if (response.status === 200) {
-        // Handle login success
-        console.log('Login successful:', data);
-        // Redirect or update state based on successful login
+        if (data.userType === 'Student') {
+          navigate('/student-dashboard');
+        } else if (data.userType === 'Teacher') {
+          navigate('/teacher-dashboard');
+        }
       } else {
         // Handle login failure
         console.error('Login failed:', data.message);
@@ -50,12 +53,12 @@ const Login = () => {
         <br />
         <input
           type="password"
-          placeholder="Password"
+          placeholder="Parola"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
         <br />
-        <button type="submit">Login</button>
+        <button type="submit">Intra in cont</button>
       </form>
     </div>
   );
