@@ -13,10 +13,14 @@ const TeacherDashboard = () => {
   const [acceptedRequests, setAcceptedRequests] = useState([]);
 
   const handleRequestAccepted = (acceptedRequest) => {
-    setAcceptedRequests(prevAccepted => [...prevAccepted, acceptedRequest]);
-    setPendingRequests(prevPending =>
-      prevPending.filter(req => req.request_id !== acceptedRequest.request_id)
+    // Filter out the accepted request from pending requests
+    const updatedPendingRequests = pendingRequests.filter(
+      (req) => req.request_id !== acceptedRequest.request_id
     );
+  
+    // Update both accepted and pending requests states
+    setAcceptedRequests((prevAccepted) => [...prevAccepted, acceptedRequest]);
+    setPendingRequests(updatedPendingRequests);
   };
 
   useEffect(() => {

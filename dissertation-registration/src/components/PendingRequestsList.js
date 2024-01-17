@@ -17,12 +17,14 @@ const PendingRequestsList = ({ requests, onAccept }) => {
       body: JSON.stringify({ requestId })
     })
       .then(() => {
-        const acceptedRequest = requests.find(req => req.request_id === requestId);
+        const acceptedRequest = requests.find(
+          (req) => req.request_id === requestId
+        );
         if (acceptedRequest) {
           onAccept(acceptedRequest); // Call the function passed from the parent
         }
       })
-      .catch(error => console.error('Error accepting request:', error));
+      .catch((error) => console.error('Error accepting request:', error));
   };
 
   const handleDeny = (requestId) => {
@@ -43,17 +45,21 @@ const PendingRequestsList = ({ requests, onAccept }) => {
   return (
     <div className='PendingRequestsList'>
       <h3>Pending Requests</h3>
-      <ul>
-        {pendingRequests.map(request => (
-          <li key={request.request_id}>
-            {request.student_name}
-            <button onClick={() => handleAccept(request.request_id)}>Accept</button>
-            <button onClick={() => handleDeny(request.request_id)}>Deny</button>
-          </li>
-        ))}
-      </ul>
+      {pendingRequests.length === 0 ? (
+        <p>No pending requests available.</p>
+      ) : (
+        <ul>
+          {pendingRequests.map(request => (
+            <li key={request.request_id}>
+              {request.student_name}
+              <button onClick={() => handleAccept(request.request_id)}>Accept</button>
+              <button onClick={() => handleDeny(request.request_id)}>Deny</button>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
-  );
+  );  
 };
 
 export default PendingRequestsList;
