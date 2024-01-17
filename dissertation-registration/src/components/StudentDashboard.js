@@ -10,11 +10,34 @@ const StudentDashboard = () => {
 
   const containerRef = useRef(null);
   const [isAssigned, setIsAssigned] = useState(false);
+  const [fileUploaded, setFileUploaded] = useState(false); // State to track if a file has been uploaded
 
-  // Define the handleFileUpload function to handle file uploads
-  const handleFileUpload = (file) => {
+  const handleFileUpload = async (file) => {
     // Handle the file upload logic here
     console.log('File uploaded:', file);
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('studentId', studentId);
+
+      const response = await fetch('http://localhost:3001/upload-file', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('File upload failed');
+      }
+
+      // Set the flag in local storage to remember the file upload
+      localStorage.setItem(`fileUploaded_${studentId}`, 'true');
+
+      // Update the state to reflect the file upload
+      setFileUploaded(true);
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    }
   };
 
   useEffect(() => {
@@ -46,6 +69,12 @@ const StudentDashboard = () => {
     const containerElement = containerRef.current;
     containerElement.addEventListener('animationend', handleAnimationEnd);
 
+    // Check local storage to see if a file has been uploaded for this student
+    const isFileUploaded = localStorage.getItem(`fileUploaded_${studentId}`);
+    if (isFileUploaded === 'true') {
+      setFileUploaded(true);
+    }
+
     return () => {
       containerElement.removeEventListener('animationend', handleAnimationEnd);
     };
@@ -56,7 +85,15 @@ const StudentDashboard = () => {
       <div className="dashboard-content">
         <h2>Dashboard Student</h2>
         {isAssigned ? (
-          <FileUploadDownloadPrompt onFileUpload={handleFileUpload} />
+          // Display the "File uploaded successfully. Awaiting further instructions..." message
+          fileUploaded ? (
+            <div>
+              <p>File uploaded successfully. Awaiting further instructions...</p>
+            </div>
+          ) : (
+            // Display the file upload/download prompt if a file has not been uploaded
+            <FileUploadDownloadPrompt onFileUpload={handleFileUpload} />
+          )
         ) : (
           <AvailableTeachersList studentId={studentId} />
         )}

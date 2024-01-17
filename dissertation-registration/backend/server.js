@@ -3,6 +3,15 @@ const cors = require('cors');
 const path = require('path'); // Import the 'path' module
 const app = express();
 const port = 3001; // Can be any port that doesn't conflict with your React app
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+    destination: './uploads/', // Specify the directory where uploaded files will be stored
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname)); // Define the file name
+    },
+});
+const upload = multer({ storage });
 
 app.use(express.json()); // For parsing application/json
 app.use(cors());
@@ -174,7 +183,6 @@ app.post('/accept-request', (req, res) => {
     });
 });
 
-
 // Endpoint to deny a request
 app.post('/deny-request', (req, res) => {
     const { requestId } = req.body;
@@ -189,5 +197,37 @@ app.post('/deny-request', (req, res) => {
         } else {
             res.send({ message: 'Request denied' });
         }
+    });
+});
+
+// Endpoint for uploading files
+app.post('/upload-file', upload.single('file'), (req, res) => {
+    const { studentId } = req.body;
+    const filePath = req.file.path; // Get the path of the uploaded file
+  
+    // Store the file path in the database, associating it with the student
+    const insertSql = `INSERT INTO StudentFiles (student_id, file_path) VALUES (?, ?)`;
+    db.run(insertSql, [studentId, filePath], (err) => {
+      if (err) {
+        res.status(500).send({ error: err.message });
+      } else {
+        res.send({ message: 'File uploaded successfully' });
+      }
+    });
+});
+
+// Endpoint for retrieving the file path associated with a student
+app.get('/get-file/:studentId', (req, res) => {
+    const { studentId } = req.params;
+    const sql = `SELECT file_path FROM StudentFiles WHERE student_id = ?`;
+  
+    db.get(sql, [studentId], (err, row) => {
+      if (err) {
+        res.status(500).send({ error: err.message });
+      } else if (row) {
+        res.sendFile(row.file_path); // Send the file associated with the student
+      } else {
+        res.status(404).send({ message: 'File not found for this student' });
+      }
     });
 });
