@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import AvailableTeachersList from './AvailableTeachersList';
+import FileUploadDownloadPrompt from './FileUploadDownloadPrompt';
 import '../styles/Dashboard.css';
 
 const StudentDashboard = () => {
@@ -10,10 +11,16 @@ const StudentDashboard = () => {
   const containerRef = useRef(null);
   const [isAssigned, setIsAssigned] = useState(false);
 
+  // Define the handleFileUpload function to handle file uploads
+  const handleFileUpload = (file) => {
+    // Handle the file upload logic here
+    console.log('File uploaded:', file);
+  };
+
   useEffect(() => {
     containerRef.current.getBoundingClientRect();
 
-    console.log('Student ID in Dashboard:', studentId);
+    console.log('Student ID in Dashboard:', studentId); // Log studentId
 
     const checkIfAssigned = async () => {
       try {
@@ -23,6 +30,8 @@ const StudentDashboard = () => {
         }
         const data = await response.json();
         setIsAssigned(data.isAssigned);
+
+        console.log('Is Assigned:', data.isAssigned); // Log isAssigned value
       } catch (error) {
         console.error('Error:', error);
       }
@@ -46,7 +55,11 @@ const StudentDashboard = () => {
     <div className="dashboard-container" ref={containerRef}>
       <div className="dashboard-content">
         <h2>Dashboard Student</h2>
-        {!isAssigned && <AvailableTeachersList studentId={studentId} />}
+        {isAssigned ? (
+          <FileUploadDownloadPrompt onFileUpload={handleFileUpload} />
+        ) : (
+          <AvailableTeachersList studentId={studentId} />
+        )}
       </div>
     </div>
   );

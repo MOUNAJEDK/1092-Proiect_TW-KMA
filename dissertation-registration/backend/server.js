@@ -1,10 +1,13 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path'); // Import the 'path' module
 const app = express();
 const port = 3001; // Can be any port that doesn't conflict with your React app
 
 app.use(express.json()); // For parsing application/json
 app.use(cors());
+
+app.use('/static', express.static(path.join(__dirname, 'static')));
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
