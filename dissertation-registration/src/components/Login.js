@@ -14,7 +14,7 @@ const Login = () => {
     event.preventDefault();
 
     try {
-      const response = await fetch('/login', {
+      const response = await fetch('http://localhost:3001/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -24,10 +24,12 @@ const Login = () => {
 
       const data = await response.json();
       if (response.status === 200) {
+        // Extract the user ID from the response
+        const userId = data.userId;
         if (data.userType === 'Student') {
-          navigate('/student-dashboard');
+          navigate('/student-dashboard', { state: { studentId: userId } });
         } else if (data.userType === 'Teacher') {
-          navigate('/teacher-dashboard');
+          navigate('/teacher-dashboard', { state: { teacherId: userId } });
         }
       } else {
         // Handle login failure

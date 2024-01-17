@@ -1,0 +1,33 @@
+.AvailableTeachersList {
+    width: 100%;
+}
+
+.AvailableTeachersList h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.AvailableTeachersList ul {
+    list-style: none;
+    padding: 0;
+}
+
+.AvailableTeachersList li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.AvailableTeachersList li button {
+    margin-left: 10px; /* Add a left margin to create space between the teacher's name and the button */
+}
+
+.AvailableTeachersList .teacher-name {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.AvailableTeachersList button {
+    width: 100px; /* Adjust the width as needed */
+}
+
