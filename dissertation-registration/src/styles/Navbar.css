@@ -16,7 +16,14 @@
     z-index: 1000;
 }
 
+.navbar-right {
+    margin-right: 20px; /* Adjust this to move the button closer or further from h1 */
+    display: flex;
+    align-items: center; /* To vertically center the button */
+}
+
 .navbar h1 {
+    margin-left: 100px; /* Adjust as needed */
     color: #FFF;
     font-size: 1.5rem;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);

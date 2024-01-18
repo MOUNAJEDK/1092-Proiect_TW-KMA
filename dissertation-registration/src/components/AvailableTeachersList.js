@@ -41,7 +41,7 @@ const AvailableTeachersList = ({ studentId }) => {
 
     return (
         <div className='AvailableTeachersList'>
-            <h3>Profesori Disponibili</h3>
+            <h3>Available Teachers</h3>
             <ul>
                 {teachers.map((teacher) => (
                     <li key={teacher.teacher_id}>

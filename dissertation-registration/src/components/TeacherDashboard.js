@@ -28,10 +28,10 @@ const TeacherDashboard = () => {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-  
+
       // Use response.blob() to get the file data
       const blob = await response.blob();
-  
+
       // Create a download link and trigger a click event to start the download
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -46,7 +46,6 @@ const TeacherDashboard = () => {
   };
 
   const handleUploadTeacherFile = async (studentId, event) => {
-    // Implement the logic to upload the teacher file
     const file = event.target.files[0];
     if (!file) {
       console.error('No file selected.');
@@ -56,6 +55,7 @@ const TeacherDashboard = () => {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('studentId', studentId);
+    formData.append('teacherId', teacherId);
 
     try {
       const response = await fetch('http://localhost:3001/upload-teacher-file', {
@@ -68,6 +68,13 @@ const TeacherDashboard = () => {
       }
 
       console.log('Teacher file uploaded successfully');
+
+      // Update the state to reflect the file upload
+      setAcceptedRequests((prevRequests) =>
+        prevRequests.map(req =>
+          req.student_id === studentId ? { ...req, fileSent: true } : req
+        )
+      );
     } catch (error) {
       console.error('Error uploading teacher file:', error);
     }
@@ -84,7 +91,6 @@ const TeacherDashboard = () => {
         if (!pendingResponse.ok) {
           throw new Error(`HTTP error! Status: ${pendingResponse.status}`);
         }
-
         if (!acceptedResponse.ok) {
           throw new Error(`HTTP error! Status: ${acceptedResponse.status}`);
         }
@@ -92,16 +98,20 @@ const TeacherDashboard = () => {
         const pendingData = await pendingResponse.json();
         const acceptedData = await acceptedResponse.json();
 
+        // Update the state with fileSent status
+        const acceptedDataWithFileSentStatus = acceptedData.map(request => ({
+          ...request,
+          fileSent: request.file_sent
+        }));
+        setAcceptedRequests(acceptedDataWithFileSentStatus);
         setPendingRequests(pendingData);
-        setAcceptedRequests(acceptedData);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
 
     if (!teacherId) {
-      // Redirect if there is no teacherId
-      navigate('/login'); // or any other route
+      navigate('/login');
     } else {
       fetchData();
     }

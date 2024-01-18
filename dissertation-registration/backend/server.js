@@ -141,17 +141,18 @@ app.get('/accepted-requests/:teacherId', (req, res) => {
     const { teacherId } = req.params;
     const sql = `
     SELECT
-    str.request_id,
-    s.user_id as student_id,
-    s.Firstname || ' ' || s.lastName as student_name,
-    sf.file_path as file_path
-  FROM StudentTeacherRequests str
-  JOIN Users s ON str.student_id = s.user_id
-  LEFT JOIN StudentFiles sf ON str.student_id = sf.student_id
-  WHERE str.teacher_id = ? AND str.status = 'approved'
+        str.request_id,
+        s.user_id as student_id,
+        s.Firstname || ' ' || s.lastName as student_name,
+        sf.file_path as file_path,
+        CASE WHEN tuf.file_sent IS NULL THEN FALSE ELSE tuf.file_sent END as file_sent
+    FROM StudentTeacherRequests str
+    JOIN Users s ON str.student_id = s.user_id
+    LEFT JOIN StudentFiles sf ON str.student_id = sf.student_id
+    LEFT JOIN TeacherUploadedFiles tuf ON str.student_id = tuf.student_id AND tuf.teacher_id = ?
+    WHERE str.teacher_id = ? AND str.status = 'approved'
     `;
-    db.all(sql, [teacherId], (err, rows) => {
-        console.log("Accepted Requests Data:", rows); // Add this line
+    db.all(sql, [teacherId, teacherId], (err, rows) => {
         if (err) {
             res.status(500).send({ error: err.message });
         } else {
@@ -245,18 +246,36 @@ app.get('/get-file/:studentId', (req, res) => {
 // Modify the /upload-teacher-file endpoint
 app.post('/upload-teacher-file', upload.single('file'), (req, res) => {
     const { teacherId, studentId } = req.body;
-    const filePath = req.file.path; // Get the path of the uploaded file
+    const filePath = req.file.path;
 
-    // Store the file path in the database, associating it with the teacher and student
-    const insertSql = `
-      INSERT INTO TeacherUploadedFiles (teacher_id, student_id, file_path)
-      VALUES (?, ?, ?)
-    `;
-    db.run(insertSql, [teacherId, studentId, filePath], (err) => {
+    // First, insert the file information into TeacherUploadedFiles
+    const insertSql = `INSERT INTO TeacherUploadedFiles (teacher_id, student_id, file_path) VALUES (?, ?, ?)`;
+    db.run(insertSql, [teacherId, studentId, filePath], function(err) {
         if (err) {
             res.status(500).send({ error: err.message });
-        } else {
-            res.send({ message: 'Teacher file uploaded successfully' });
+            return;
         }
+        // If insert is successful, set file_sent to TRUE
+        const updateSql = `UPDATE TeacherUploadedFiles SET file_sent = TRUE WHERE rowid = ?`;
+        db.run(updateSql, [this.lastID], (updateErr) => {
+            if (updateErr) {
+                res.status(500).send({ error: updateErr.message });
+            } else {
+                res.send({ message: 'Teacher file uploaded successfully' });
+            }
+        });
+    });
+});
+
+app.get('/check-registration-status/:studentId', (req, res) => {
+    const { studentId } = req.params;
+    const sql = `SELECT COUNT(*) AS count FROM TeacherUploadedFiles WHERE student_id = ? AND file_sent = TRUE`;
+
+    db.get(sql, [studentId], (err, row) => {
+        if (err) {
+            res.status(500).send({ error: err.message });
+            return;
+        }
+        res.send({ registrationFinished: row.count > 0 });
     });
 });

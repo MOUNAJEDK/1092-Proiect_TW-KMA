@@ -16,17 +16,23 @@ const AcceptedRequestsList = ({ requests, onDownload, onUpload }) => {
           {requests.map((request) => (
             <li key={request.request_id}>
               {request.student_name}
-              {request.file_path ? (
-                <>
-                  <p>File uploaded by the student: <a href={`http://localhost:3001/${request.file_path}`} target="_blank" rel="noopener noreferrer">Download File</a></p>
-                  <input
-                    type="file"
-                    onChange={(e) => handleUploadTeacherFile(request.student_id, e)}
-                    style={{ width: '50%' }}
-                  />
-                </>
+              {request.fileSent ? (
+                <p>Sent signed file</p>
               ) : (
-                <p>No file uploaded by the student.</p>
+                <>
+                  {request.file_path ? (
+                    <>
+                      <p>File uploaded by the student: <a href={`http://localhost:3001/${request.file_path}`} target="_blank" rel="noopener noreferrer">Download File</a></p>
+                      <input
+                        type="file"
+                        onChange={(e) => handleUploadTeacherFile(request.student_id, e)}
+                        style={{ width: '50%' }}
+                      />
+                    </>
+                  ) : (
+                    <p>No file uploaded by the student.</p>
+                  )}
+                </>
               )}
             </li>
           ))}
@@ -34,6 +40,7 @@ const AcceptedRequestsList = ({ requests, onDownload, onUpload }) => {
       )}
     </div>
   );
+
 };
 
 export default AcceptedRequestsList;

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import AvailableTeachersList from './AvailableTeachersList';
 import FileUploadDownloadPrompt from './FileUploadDownloadPrompt';
+import RegistrationStatusMessage from './RegistrationStatusMessage';
 import '../styles/Dashboard.css';
 
 const StudentDashboard = () => {
@@ -83,7 +84,8 @@ const StudentDashboard = () => {
   return (
     <div className="dashboard-container" ref={containerRef}>
       <div className="dashboard-content">
-        <h2>Dashboard Student</h2>
+        <h2>Student Dashboard</h2>
+        <RegistrationStatusMessage studentId={studentId} />
         {isAssigned ? (
           // Display the "File uploaded successfully. Awaiting further instructions..." message
           fileUploaded ? (

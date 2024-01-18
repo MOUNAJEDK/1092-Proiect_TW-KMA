@@ -55,12 +55,12 @@ const Login = () => {
         <br />
         <input
           type="password"
-          placeholder="Parola"
+          placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
         <br />
-        <button type="submit">Intra in cont</button>
+        <button type="submit">Enter Account</button>
       </form>
     </div>
   );
