@@ -13,21 +13,19 @@
 }
 
 .AvailableTeachersList li {
-    display: flex;
-    align-items: center;
+    display: block; /* Changed from flex to block */
     margin-bottom: 10px;
 }
 
-.AvailableTeachersList li button {
-    margin-left: 10px; /* Add a left margin to create space between the teacher's name and the button */
-}
-
 .AvailableTeachersList .teacher-name {
-    flex-grow: 1;
-    margin-right: 10px;
+    display: inline; /* Allows inline elements to sit next to each other */
+    margin-right: 50px; /* Adjust as needed */
 }
 
-.AvailableTeachersList button {
-    width: 100px; /* Adjust the width as needed */
+.AvailableTeachersList li button {
+    display: inline; /* Allows the button to sit next to the teacher-name */
+    margin-left: 10px; /* Adjust or remove as needed */
+    width: 150px; /* Adjust or remove as needed */
+    height: 35px; /* Adjust or remove as needed */
+    padding: 5px 15px; /* Adjust as needed for padding */
 }
-
