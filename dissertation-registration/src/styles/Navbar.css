@@ -3,20 +3,34 @@
     align-items: center;
     justify-content: space-between;
     padding: 0 20px;
-    position: absolute;
+    position: fixed;
     top: 0;
+    left: 0;
     width: 100%;
-    height: 50px; /* Reduced height for a more subtle appearance */
-    background: rgba(0, 0, 0, 0.4); /* Lighter background for a subtler glass effect */
+    height: 50px;
+    background: rgba(0, 0, 0, 0.4); 
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border-bottom: 2px solid rgba(255, 0, 0, 0.6); /* Solid neon bottom border */
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5); /* Softer shadow for depth */
-    z-index: 1000; /* Ensure the navbar is above other elements */
+    border-bottom: 2px solid rgba(255, 0, 0, 0.6); 
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5); 
+    z-index: 1000;
+}
+
+.navbar-right {
+    margin-right: 20px; /* Adjust this to move the button closer or further from h1 */
+    display: flex;
+    align-items: center; /* To vertically center the button */
 }
 
 .navbar h1 {
-    color: #FFF; /* White color for the text */
-    font-size: 1.5rem; /* Larger font size for better readability */
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Text shadow for a glowing effect */
+    margin-left: 50px; /* Adjust as needed */
+    color: #FFF;
+    font-size: 1.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.navbar-logo {
+    height: 60px; /* Adjust as needed */
+    width: auto;
+    /* Additional styling */
 }

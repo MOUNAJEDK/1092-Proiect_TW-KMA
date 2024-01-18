@@ -8,6 +8,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
   margin: 0;
   padding: 0;
+  background: url('../src/assets/background-image-website.png') no-repeat center center fixed;
+  background-size: cover;
+  margin: 0;
+  padding-top: 50px; 
+  height: 100vh;
+  overflow: hidden; 
 }
 
 
@@ -40,10 +46,4 @@ h5,
 h6,
 p {
   font-family: 'Montserrat', sans-serif;
-}
-
-body {
-  background: url('../src/assets/background-image-website.png') no-repeat center center fixed;
-  background-size: cover; /* Cover the entire page */
-  overflow: hidden; /* Hide scrollbars if the GIF is larger than the screen */
 }

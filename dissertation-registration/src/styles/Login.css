@@ -4,30 +4,20 @@
     align-items: center;
     justify-content: center;
     height: 300px;
-    /* Adjust to your preference */
     width: 400px;
-    /* Same as height to create a square */
     border-radius: 15px;
-    /* Smooth edges */
     margin: auto;
-    /* Center the box in the viewport */
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     background: rgba(0, 0, 0, 0.7);
-    /* Dark background for glass effect */
     background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4));
     backdrop-filter: blur(10px);
-    /* Blur effect for glass */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(255, 0, 0, 0.3);
-    /* Subtle red glow */
     box-sizing: border-box;
-    /* Include padding and border in the box's dimensions */
     padding: 20px;
-    /* Add padding inside the box */
-    /* Added for neon glow */
     box-shadow: 0 0 8px rgba(255, 0, 0, 0.8),
         0 0 30px rgba(255, 0, 0, 0.45),
         inset 0 0 4px rgba(255, 0, 0, 0.3);
@@ -37,7 +27,6 @@
 h2 {
     text-align: center;
     color: white;
-    /* Adjust the color for better visibility on the red background */
 }
 
 form {
@@ -51,20 +40,14 @@ button {
     margin: 5px 0;
     padding: 10px;
     width: calc(100% + 75px);
-    /* Subtract padding */
     border-radius: 8px;
     outline: none;
     border: 1px solid rgba(255, 255, 255, 0.3);
-    /* Adjust the border color for glass effect */
     background-color: rgba(255, 255, 255, 0.1);
-    /* Input background for glass effect */
     color: white;
-    /* Adjust text color for visibility */
 }
 
 button {
     cursor: pointer;
     background-color: rgba(255, 255, 255, 0.2);
-    /* Button background for glass effect */
-    /* Rest of the styles */
 }
