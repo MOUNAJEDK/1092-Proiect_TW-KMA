@@ -16,7 +16,11 @@ const upload = multer({ storage });
 app.use(express.json()); // For parsing application/json
 app.use(cors());
 
+// Serve static files from the 'static' directory
 app.use('/static', express.static(path.join(__dirname, 'static')));
+
+// Serve static files from the 'uploads' directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
@@ -136,12 +140,18 @@ app.get('/pending-requests/:teacherId', (req, res) => {
 app.get('/accepted-requests/:teacherId', (req, res) => {
     const { teacherId } = req.params;
     const sql = `
-      SELECT str.request_id, s.user_id as student_id, s.Firstname || ' ' || s.lastName as student_name
-      FROM StudentTeacherRequests str
-      JOIN Users s ON str.student_id = s.user_id
-      WHERE str.teacher_id = ? AND str.status = 'approved'
+    SELECT
+    str.request_id,
+    s.user_id as student_id,
+    s.Firstname || ' ' || s.lastName as student_name,
+    sf.file_path as file_path
+  FROM StudentTeacherRequests str
+  JOIN Users s ON str.student_id = s.user_id
+  LEFT JOIN StudentFiles sf ON str.student_id = sf.student_id
+  WHERE str.teacher_id = ? AND str.status = 'approved'
     `;
     db.all(sql, [teacherId], (err, rows) => {
+        console.log("Accepted Requests Data:", rows); // Add this line
         if (err) {
             res.status(500).send({ error: err.message });
         } else {
@@ -204,30 +214,49 @@ app.post('/deny-request', (req, res) => {
 app.post('/upload-file', upload.single('file'), (req, res) => {
     const { studentId } = req.body;
     const filePath = req.file.path; // Get the path of the uploaded file
-  
+
     // Store the file path in the database, associating it with the student
     const insertSql = `INSERT INTO StudentFiles (student_id, file_path) VALUES (?, ?)`;
     db.run(insertSql, [studentId, filePath], (err) => {
-      if (err) {
-        res.status(500).send({ error: err.message });
-      } else {
-        res.send({ message: 'File uploaded successfully' });
-      }
+        if (err) {
+            res.status(500).send({ error: err.message });
+        } else {
+            res.send({ message: 'File uploaded successfully' });
+        }
     });
 });
 
-// Endpoint for retrieving the file path associated with a student
+// Add this endpoint to your Express server
 app.get('/get-file/:studentId', (req, res) => {
     const { studentId } = req.params;
     const sql = `SELECT file_path FROM StudentFiles WHERE student_id = ?`;
-  
+
     db.get(sql, [studentId], (err, row) => {
-      if (err) {
-        res.status(500).send({ error: err.message });
-      } else if (row) {
-        res.sendFile(row.file_path); // Send the file associated with the student
-      } else {
-        res.status(404).send({ message: 'File not found for this student' });
-      }
+        if (err) {
+            res.status(500).send({ error: err.message });
+        } else if (row) {
+            res.sendFile(row.file_path); // Send the file associated with the student
+        } else {
+            res.status(404).send({ message: 'File not found for this student' });
+        }
+    });
+});
+
+// Modify the /upload-teacher-file endpoint
+app.post('/upload-teacher-file', upload.single('file'), (req, res) => {
+    const { teacherId, studentId } = req.body;
+    const filePath = req.file.path; // Get the path of the uploaded file
+
+    // Store the file path in the database, associating it with the teacher and student
+    const insertSql = `
+      INSERT INTO TeacherUploadedFiles (teacher_id, student_id, file_path)
+      VALUES (?, ?, ?)
+    `;
+    db.run(insertSql, [teacherId, studentId, filePath], (err) => {
+        if (err) {
+            res.status(500).send({ error: err.message });
+        } else {
+            res.send({ message: 'Teacher file uploaded successfully' });
+        }
     });
 });

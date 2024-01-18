@@ -1,8 +1,10 @@
 import React from 'react';
 
-const AcceptedRequestsList = ({ requests }) => {
-  // Directly log the props to verify they are passed correctly
-  console.log('AcceptedRequestsList props:', requests);
+const AcceptedRequestsList = ({ requests, onDownload, onUpload }) => {
+  console.log("Requests in AcceptedRequestsList:", requests); // Add this line
+  const handleUploadTeacherFile = (studentId, event) => {
+    onUpload(studentId, event);
+  };
 
   return (
     <div>
@@ -11,10 +13,21 @@ const AcceptedRequestsList = ({ requests }) => {
         <p>No accepted requests available.</p>
       ) : (
         <ul>
-          {requests && requests.map(request => (
+          {requests.map((request) => (
             <li key={request.request_id}>
               {request.student_name}
-              {/* More information or actions can be added here */}
+              {request.file_path ? (
+                <>
+                  <p>File uploaded by the student: <a href={`http://localhost:3001/${request.file_path}`} target="_blank" rel="noopener noreferrer">Download File</a></p>
+                  <input
+                    type="file"
+                    onChange={(e) => handleUploadTeacherFile(request.student_id, e)}
+                    style={{ width: '50%' }}
+                  />
+                </>
+              ) : (
+                <p>No file uploaded by the student.</p>
+              )}
             </li>
           ))}
         </ul>
